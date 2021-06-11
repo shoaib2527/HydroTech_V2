@@ -11,9 +11,9 @@ Ticker ticker;
 #define LED_BUILTIN 13
 #endif
 int LED = LED_BUILTIN;
-int MAIN_RELAY = LED_BUILTIN; //D1;
+int MAIN_RELAY = D1;
 String ID = "";
-String USER_ID = "6";
+String USER_ID = "0";
 JSONVar device = null;
 bool isDevice = false;
 JSONVar service = null;
