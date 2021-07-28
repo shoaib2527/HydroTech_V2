@@ -7,7 +7,7 @@ void getService()
   std::unique_ptr<BearSSL::WiFiClientSecure> client(new BearSSL::WiFiClientSecure);
   client->setInsecure();
   HTTPClient http2;
-  if (http2.begin(*client, serverPath + "/services?servedBy=" + USER_ID + "&status=running&status=posted"))
+  if (http2.begin(*client, serverPath + "/servicesfordevice?servedBy=" + USER_ID + "&status=running&status=posted"))
   {
     Serial.print("[HTTP] getService GET...\n");
     int httpCode = http2.GET();
@@ -165,7 +165,7 @@ void updateService(String body)
       client(new BearSSL::WiFiClientSecure);
   client->setInsecure();
   HTTPClient http3;
-  http3.begin(*client, serverPath + "/services/" + (int)service["id"]); //HTTP
+  http3.begin(*client, serverPath + "/servicesfordevice/" + (int)service["id"]); //HTTP
   http3.addHeader("Content-Type", "application/json");
 
   // start connection and send HTTP header and body

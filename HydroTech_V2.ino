@@ -50,44 +50,47 @@ void loop()
       getService();
       if (isService)
       {
-        Serial.println("Service isn't null...");
-        Serial.print("Remamining Time: ");
-        Serial.println((int)service["serviceInitialDuration"] - (int)service["serviceDuration"]);
+        while (isService)
+        {
+          Serial.println("Service isn't null...");
+          Serial.print("Remamining Time: ");
+          Serial.println((int)service["serviceInitialDuration"] - (int)service["serviceDuration"]);
 
-        currentCycleMillis = millis();
-        if (previousCycleMillis != 0)
-        {
-          cycleDurationInSeconds = (currentCycleMillis - previousCycleMillis) / 1000;
-        }
-        previousCycleMillis = currentCycleMillis;
-        newServiceDuration = (int)service["serviceDuration"] + cycleDurationInSeconds;
-        if (serviceRemainingTimeInSeconds == 0)
-          serviceRemainingTimeInSeconds = (int)service["serviceInitialDuration"] - (int)service["serviceDuration"];
-        else
-          serviceRemainingTimeInSeconds = (int)service["serviceInitialDuration"] - newServiceDuration;
-        if (serviceRemainingTimeInSeconds > 3)
-        {
-          turnMachineOn();
-          Serial.println(service);
-          String serviceStatus = (const char *)service["status"];
-          Serial.println(service["status"]);
-          Serial.println(serviceStatus);
-          if (serviceStatus == "posted")
-            updateService("{\"status\":\"running\",\"serviceDuration\":\"" + (String)newServiceDuration + "\"}");
+          currentCycleMillis = millis();
+          if (previousCycleMillis != 0)
+          {
+            cycleDurationInSeconds = (currentCycleMillis - previousCycleMillis) / 1000;
+          }
+          previousCycleMillis = currentCycleMillis;
+          newServiceDuration = (int)service["serviceDuration"] + cycleDurationInSeconds;
+          if (serviceRemainingTimeInSeconds == 0)
+            serviceRemainingTimeInSeconds = (int)service["serviceInitialDuration"] - (int)service["serviceDuration"];
           else
-            updateService("{\"serviceDuration\":\"" + (String)newServiceDuration + "\"}");
-          updateConnection(false, cycleDurationInSeconds);
-        }
-        else
-        {
-          turnMachineOff();
-          updateService("{\"status\":\"completed\",\"serviceDuration\":\"" + (String)newServiceDuration + "\"}");
-          updateConnection(false, cycleDurationInSeconds);
-          previousCycleMillis = 0;
-          currentCycleMillis = 0;
-          cycleDurationInSeconds = 0;
-          serviceRemainingTimeInSeconds = 0;
-          newServiceDuration = 0;
+            serviceRemainingTimeInSeconds = (int)service["serviceInitialDuration"] - newServiceDuration;
+          if (serviceRemainingTimeInSeconds > 3)
+          {
+            turnMachineOn();
+            Serial.println(service);
+            String serviceStatus = (const char *)service["status"];
+            Serial.println(service["status"]);
+            Serial.println(serviceStatus);
+            if (serviceStatus == "posted")
+              updateService("{\"status\":\"running\",\"serviceDuration\":\"" + (String)newServiceDuration + "\"}");
+            else
+              updateService("{\"serviceDuration\":\"" + (String)newServiceDuration + "\"}");
+            updateConnection(false, cycleDurationInSeconds);
+          }
+          else
+          {
+            turnMachineOff();
+            updateService("{\"status\":\"completed\",\"serviceDuration\":\"" + (String)newServiceDuration + "\"}");
+            updateConnection(false, cycleDurationInSeconds);
+            previousCycleMillis = 0;
+            currentCycleMillis = 0;
+            cycleDurationInSeconds = 0;
+            serviceRemainingTimeInSeconds = 0;
+            newServiceDuration = 0;
+          }
         }
       }
       else
