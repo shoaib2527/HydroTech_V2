@@ -19,6 +19,7 @@ void wifiStuff () {
   Serial.println("connected...yeey :)");
   ticker.detach();
   digitalWrite(LED, LOW);
+  digitalWrite(LED_BUILTIN, LOW);
   ID = WiFi.macAddress();
   Serial.println(ID);
 }
