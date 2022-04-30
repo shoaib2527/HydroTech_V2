@@ -95,7 +95,7 @@ void updateConnection(bool sendId, long seconds)
 {
   //  WiFiClient client1;
   std::unique_ptr<BearSSL::WiFiClientSecure>
-      client(new BearSSL::WiFiClientSecure);
+  client(new BearSSL::WiFiClientSecure);
   client->setInsecure();
   HTTPClient http1;
 
@@ -106,22 +106,30 @@ void updateConnection(bool sendId, long seconds)
 
   Serial.print("[HTTP] PUT Connection...\n");
   // start connection and send HTTP header and body
+  String connection = "false";
+  if (isDeviceConnected) {
+    isDeviceConnected = false;
+    connection = "false";
+  }
+  else {
+    isDeviceConnected = true;
+    connection = "true";
+  }
   int httpCode;
   if (seconds <= 0)
   {
     if (sendId)
-      httpCode = http1.PUT("{\"isDeviceConnected\":true,\"deviceId\":\"" + ID + "\"}");
+      httpCode = http1.PUT("{\"isDeviceConnected\":" + connection + ",\"deviceId\":\"" + ID + "\"}");
     else
-      httpCode = http1.PUT("{\"isDeviceConnected\":true}");
+      httpCode = http1.PUT("{\"isDeviceConnected\":" + connection + "}");
   }
   else
   {
     String millis_available = (const char *)device["availablemillis"];
     long availablemillis = millis_available.toInt() - seconds;
-    if (sendId)
-      httpCode = http1.PUT("{\"isDeviceConnected\":true,\"deviceId\":\"" + ID + "\",\"availablemillis\":" + (String)availablemillis + "}");
+    if (sendId)httpCode = http1.PUT("{\"isDeviceConnected\":" + connection + ",\"deviceId\":\"" + ID + "\",\"availablemillis\":" + (String)availablemillis + "}");
     else
-      httpCode = http1.PUT("{\"isDeviceConnected\":true,\"availablemillis\":" + (String)availablemillis + "}");
+      httpCode = http1.PUT("{\"isDeviceConnected\":" + connection + ",\"availablemillis\":" + (String)availablemillis + "}");
   }
 
   // httpCode will be negative on error
@@ -162,7 +170,7 @@ void updateService(String body)
 {
   //  WiFiClient client1;
   std::unique_ptr<BearSSL::WiFiClientSecure>
-      client(new BearSSL::WiFiClientSecure);
+  client(new BearSSL::WiFiClientSecure);
   client->setInsecure();
   HTTPClient http3;
   http3.begin(*client, serverPath + "/servicesfordevice/" + (int)service["id"]); //HTTP

@@ -17,6 +17,7 @@ String ID = "";
 String USER_ID = "0";
 JSONVar device = null;
 bool isDevice = false;
+bool isDeviceConnected = false;
 JSONVar service = null;
 bool isService = false;
 String jsonBuffer;
