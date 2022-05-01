@@ -203,7 +203,10 @@ void updateService(String body)
       else
       {
         Serial.println(myObject);
-        setService(myObject);
+        if ((String)(const char *)myObject["status"] == "aborted")
+          clearService();
+        else
+          setService(myObject);
       }
     }
   }
