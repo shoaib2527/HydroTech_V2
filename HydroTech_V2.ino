@@ -14,7 +14,7 @@ int LED = D2;
 int MAIN_RELAY = D1;
 String ID = "";
 // You need to update USER_ID Field
-String USER_ID = "0";
+String USER_ID = "47";
 JSONVar device = null;
 bool isDevice = false;
 bool isDeviceConnected = false;
@@ -87,6 +87,7 @@ void loop()
           {
             turnMachineOff();
             updateService("{\"status\":\"completed\",\"serviceDuration\":\"" + (String)newServiceDuration + "\"}");
+            clearService();
             updateConnection(false, cycleDurationInSeconds);
             previousCycleMillis = 0;
             currentCycleMillis = 0;
