@@ -14,7 +14,7 @@ int LED = D2;
 int MAIN_RELAY = D1;
 String ID = "";
 // You need to update USER_ID Field
-String USER_ID = "47";
+String USER_ID = "0";
 JSONVar device = null;
 bool isDevice = false;
 bool isDeviceConnected = false;
@@ -28,6 +28,7 @@ void setup()
   pinMode(LED, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(MAIN_RELAY, OUTPUT);
+  turnMachineOff();
   wifiStuff();
   handleDevice();
 }
